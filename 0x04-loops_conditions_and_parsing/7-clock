@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+#Displays the time for 12 hours and 59 minutes
+hour=0
+minute=1
+while [ $hour -le 12 ];
+do
+if [ $hour -eq 0 ];
+then
+  echo "12:$minute AM"
+elif [ $hour -eq 12 ];
+then
+  echo "12:$minute PM"
+elif [ $hour -lt 10 ];
+then
+  echo "0$hour:$minute AM"
+else
+  echo "$hour:$minute AM"
+fi
+
+minute=$((minute + 1))
+if [ $minute -eq 60 ]; 
+then
+  minute=1
+  hour=$((hour + 1))
+fi
+done | head -n 70
