@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#For 9th iteration, displays Best School then Hi
+counter=0
+while [ $counter -lt 10 ];
+do
+  if [ $counter -eq 8 ];
+then
+   echo "Best School"
+   echo "Hi"
+  else
+   echo "Best School"
+  fi
+  counter=$((counter + 1))  
+done
