@@ -8,6 +8,7 @@ global
         user haproxy
         group haproxy
         daemon
+        tune.ssl.default-dh-param 2048
 
         # Default SSL material locations
         ca-base /etc/ssl/certs
@@ -34,20 +35,13 @@ defaults
         errorfile 503 /etc/haproxy/errors/503.http
         errorfile 504 /etc/haproxy/errors/504.http
 
-frontend www-http
-        bind  0.0.0.0:80
+frontend http_front
+        bind *:443 ssl crt /etc/letsencrypt/live/www.webenthusiast.tech/www.webenthusiast.tech.pem
         http-request add-header X-Forwarded-Proto http
-        default_backend www-backend
+        http-request redirect scheme https if !{ ssl_fc }
+        use_backend http_back
 
-frontend www-https
-        bind  0.0.0.0:443 ssl crt /etc/letsencrypt/live/www.webenthusiast.tech/www.webenthusiast.tech.pem
-        http-request add-header X-Forwarded-Proto https
-        acl   letsencrypt-acl path_beg /.well-known/acme-challenge/
-        use_backend letsencrypt-backend if letsencrypt-acl
-        default_backend www-backend
-
-backend www-backend
-        balance roundrobin
-        redirect scheme https if ! { ssl_fc }
-        server 307838-web-01 100.25.179.207:80 check
-        server 307838-web-02 35.175.63.230:80 check
+backend http_back
+        redirect scheme https if !{ ssl_fc }
+        server 307838-web-01 100.25.179.207:80
+        server 307838-web-02 35.175.63.230:80
