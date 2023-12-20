@@ -12,4 +12,4 @@ service nginx restart
 ps auxff | grep ngin[x]
 
 # Check if Nginx is listening on port 8080
-nc -z 0 8080 ; echo $?
+nc -z localhost 8080 ; echo $?
