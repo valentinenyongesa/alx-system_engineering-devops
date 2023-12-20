@@ -1,15 +1,18 @@
 #!/usr/bin/env bash
+# Stop Nginx if it is already running
+service nginx stop
+
 # Update Nginx configuration to run as the nginx user
-sed -i 's/user\s*nginx;/user nginx;/' /etc/nginx/nginx.conf
+sed -i 's/user\s*[^;]*/user nginx;/' /etc/nginx/nginx.conf
 
-# Update Nginx to listen on all active IPs on port 8080
-sed -i 's/listen\s*80;/listen 8080;/' /etc/nginx/sites-available/default
+# Update Nginx default site configuration to listen on all active IPs on port 8080
+sed -i '/listen/s/80/8080/' /etc/nginx/sites-available/default
 
-# Restart Nginx for the changes to take effect
-service nginx restart
+# Start Nginx with the updated configuration
+service nginx start
 
-# Display Nginx processes to verify the user and port
-ps auxff | grep ngin[x]
+# Display the process hierarchy for Nginx
+ps auxff | grep "[n]ginx"
 
 # Check if Nginx is listening on port 8080
-nc -z localhost 8080 ; echo $?
+nc -z 0 8080 ; echo $?
