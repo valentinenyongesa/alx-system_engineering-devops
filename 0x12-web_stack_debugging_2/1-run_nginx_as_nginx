@@ -1,15 +1,4 @@
 #!/usr/bin/env bash
-if [ ! -f /etc/nginx/nginx.conf ]; then
-    echo "Error: /etc/nginx/nginx.conf not found."
-    exit 1
-fi
-
-# Check if the default site configuration file exists
-if [ ! -f /etc/nginx/sites-available/default ]; then
-    echo "Error: /etc/nginx/sites-available/default not found."
-    exit 1
-fi
-
 # Update Nginx configuration to run as the nginx user
 sed -i 's/user\s*nginx;/user nginx;/' /etc/nginx/nginx.conf
 
