@@ -17,47 +17,29 @@ import requests
 import sys
 
 
-def get_todo_list(employee_id):
-    """
-    Get the TODO list for a given employee ID from the specified REST API.
-    """
-    base_url = "https://jsonplaceholder.typicode.com"
-    user_url = f"{base_url}/users/{employee_id}"
-    todo_url = f"{base_url}/todos?userId={employee_id}"
-
-    try:
-        user_response = requests.get(user_url)
-        user_data = user_response.json()
-        todo_response = requests.get(todo_url)
-        todo_data = todo_response.json()
-
-        return user_data, todo_data
-
-    except requests.exceptions.RequestException as e:
-        print(f"Error: {e}")
-        sys.exit(1)
-
-
-def display_todo_progress(employee_id, user_data, todo_data):
-    """
-    Display the TODO list progress for the given employee ID.
-    """
-    employee_name = user_data.get("name")
-    completed_tasks = [task for task in todo_data if task.get("completed")]
-    total_tasks = len(todo_data)
-
-    print(f"Employee {employee_name}
-          is done with tasks({len(completed_tasks)}/{total_tasks}): ")
-
-    for task in completed_tasks:
-        print(f"\t{task.get('title')}")
-
-
 if __name__ == "__main__":
-    if len(sys.argv) != 2 or not sys.argv[1].isdigit():
-        print("Usage: python3 gather_data_from_an_API.py <employee_id>")
-        sys.exit(1)
+    url = "https://jsonplaceholder.typicode.com/"
 
-    employee_id = int(sys.argv[1])
-    user_data, todo_data = get_todo_list(employee_id)
-    display_todo_progress(employee_id, user_data, todo_data)
+    employee_id = sys.argv[1]
+
+    user_response = requests.get(url + "users/{}".format(employee_id))
+
+    user = user_response.json()
+
+    params = {"userId": employee_id}
+
+    todos_response = requests.get(url + "todos", params=params)
+
+    todos = todos_response.json()
+
+    completed = []
+
+    for todo on todos:
+        if todo.get("completed") is True:
+            completed.append(todo.get("title"))
+
+    print("Employee {} is done with tasks({}/{})".format(user.get("name").
+                                                         len(completed).
+                                                         len(todos)))
+    for complete in completed:
+        print("/t {}".format(complete))
