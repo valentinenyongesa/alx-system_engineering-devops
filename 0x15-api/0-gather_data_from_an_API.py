@@ -34,7 +34,7 @@ if __name__ == "__main__":
 
     completed = []
 
-    for todo on todos:
+    for todo in todos:
         if todo.get("completed") is True:
             completed.append(todo.get("title"))
 
